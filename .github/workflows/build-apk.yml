@@ -8,15 +8,18 @@ jobs:
       - uses: actions/setup-python@v4
         with:
           python-version: '3.11'
+      - name: Generate Keystore
+        run: |
+          keytool -genkey -v -keystore gestor360.keystore -alias gestor360 -keyalg RSA -keysize 2048 -validity 10000 -storepass Gestor3602026 -keypass Gestor3602026 -dname "CN=Luisito, OU=Gestor360, O=Gestor360, L=LaHabana, ST=LaHabana, C=CU"
       - name: Install Buildozer
         run: |
           sudo apt update
           sudo apt install -y build-essential git zlib1g-dev libncurses5-dev libgdbm-dev libnss3-dev libssl-dev libreadline-dev libffi-dev libsqlite3-dev wget zip
           pip install buildozer cython
-      - name: Build APK
-        run: buildozer android debug
+      - name: Build APK Release
+        run: buildozer android release
       - name: Upload APK
         uses: actions/upload-artifact@v3
         with:
-          name: Gestor360-APK
+          name: Gestor360-APK-Release
           path: bin/*.apk
